@@ -59,7 +59,7 @@ function server (opts) {
           handler = spawn('php', ['-S', addr, '-t', opts.root])
 
           handler.stdout.on('data', handleOut)
-          handler.stderr.on('data', handleError)
+          handler.stderr.on('data', handleOut)
           handler.on('close', close)
 
           started = true
