@@ -86,7 +86,7 @@ function server (opts) {
       bin = bin.toString().trim();
       Promise.resolve()
         .then(() => { if (bin === '') reject('Empty path') })
-        .then(() => commandExists(bin)).catch(err => reject(bin + ' doesn\'t exist'))
+        .then(() => commandExists(bin)).catch(() => sh.log('skip command check'))//.catch(err => reject(bin + ' doesn\'t exist'))
         .then(() => checkPhp(bin)).catch(err => reject(bin + ' is not a php binary.'))
         .then(() => resolve(bin))
     })

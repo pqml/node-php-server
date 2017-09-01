@@ -1,5 +1,8 @@
 const php = require('..')
-const server = php()
+const server = php({
+  bin: 'invalidbin',
+  promptBinary: true
+})
 
 server.on('start', data => {
   console.log('Server started on http://' + data.host + ':' + data.port)
