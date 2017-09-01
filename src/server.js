@@ -1,7 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
 const spawn = require('child_process').spawn
-const commandExists = require('command-exists')
 const getPort = require('./get-port')
 const callStable = require('./call-stable')
 const Emitter = require('events')
@@ -19,7 +18,7 @@ const CACHEPATH = path.join(__dirname, '..', '.bincache')
 const DEF_OPTS = {
   bin: 'php',
   promptBinary: false,
-  host: '0.0.0.0',
+  host: '127.0.0.1',
   port: 35410,
   root: process.cwd(),
   verbose: false,
@@ -86,7 +85,6 @@ function server (opts) {
       bin = bin.toString().trim();
       Promise.resolve()
         .then(() => { if (bin === '') reject('Empty path') })
-        .then(() => commandExists(bin)).catch(err => reject(bin + ' doesn\'t exist'))
         .then(() => checkPhp(bin)).catch(err => reject(bin + ' is not a php binary.'))
         .then(() => resolve(bin))
     })
