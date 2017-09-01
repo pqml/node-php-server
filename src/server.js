@@ -8,6 +8,7 @@ const Emitter = require('events')
 const shColors = require('kool-shell/utils/colors')
 const sh = require('kool-shell')()
   .use(require('kool-shell/plugins/log'), {
+    infoPrefix: '[PHP] ',
     errorPrefix: '[PHP] ' + shColors.red('Error: ')
   })
   .use(require('kool-shell/plugins/exec'))
@@ -44,14 +45,14 @@ function server (opts) {
 
   function log (msg = '', force) {
     if ((!opts.verbose && !force) || opts.quiet) return
-    sh.log('[PHP] ' + msg.toString('utf8').trim())
+    sh.log(msg.toString('utf8').trim())
   }
 
   function error (msg = '', force) {
     msg = msg.toString('utf8').trim()
     api.emit('error', msg)
     if ((!opts.verbose && !force) || opts.quiet) return
-    sh.error('[PHP] ' + msg)
+    sh.error(msg)
   }
 
   function handleOut (data = '') {
