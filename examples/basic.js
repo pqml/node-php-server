@@ -1,7 +1,9 @@
 const php = require('..')
 const server = php({
+  host: '127.0.0.1',
   bin: 'invalidbin',
-  promptBinary: true
+  promptBinary: true,
+  verbose: true
 })
 
 server.on('start', data => {
