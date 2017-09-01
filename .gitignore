@@ -3,6 +3,7 @@
 .eslintcache
 .stylelintcache
 stats.json
+.bincache
 
 ### Node ###
 .tmp
