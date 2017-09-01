@@ -1,6 +1,6 @@
 {
   "name": "@pqml/node-php-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Node.js built-in PHP server",
   "main": "index.js",
   "private": false,
