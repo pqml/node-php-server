@@ -3,7 +3,8 @@ const server = php({
   host: '127.0.0.1',
   bin: 'invalidbin',
   promptBinary: true,
-  verbose: true
+  verbose: true,
+  root: __dirname
 })
 
 server.on('start', data => {
