@@ -23,7 +23,8 @@ const DEF_OPTS = {
   root: process.cwd(),
   verbose: false,
   quiet: false,
-  autorestart: true
+  autorestart: true,
+  args: []
 }
 
 function server (opts) {
@@ -31,12 +32,22 @@ function server (opts) {
 
   let closed = false
   let started = false
+  let currentPort = opts.port
+  let properInit = false
+  let startEventTimer = 0
   let handler
 
   const api = new Emitter()
-  const restart = callStable(start, () => error('Php built-in server closes too often.'))
+  const restart = callStable(
+    () => {
+      if (!properInit) ++currentPort
+      start()
+    },
+    () => error('Php built-in server closes too often.'),
+    { maxRetries: 20 }
+  )
 
-  api.start = opts.autorestart ? restart : start
+  api.start = start
   api.close = close
   api.isStarted = function () { return started }
 
@@ -114,23 +125,29 @@ function server (opts) {
 
   function startProcess () {
     return new Promise((resolve, reject) => {
-      getPort(opts.port)
+      getPort(currentPort)
         .then(resolvedPort => {
           if (closed) {
             close()
             resolve()
           }
           const addr = opts.host + ':' + resolvedPort
+          let args = ['-S', addr, '-t', opts.root]
 
-          handler = spawn(opts.bin, ['-S', addr, '-t', opts.root])
+          if (Array.isArray(opts.args) && opts.args.length > 0) args = args.concat(opts.args)
+
+          handler = spawn(opts.bin, args)
 
           handler.stdout.on('data', handleOut)
           handler.stderr.on('data', handleOut)
           handler.on('close', close)
 
           started = true
-          log('Server started on ' + opts.host + ':' + resolvedPort + '\n')
-          api.emit('start', { host: opts.host, port: resolvedPort })
+          clearTimeout(startEventTimer)
+          startEventTimer = setTimeout(() => {
+            log('Server started on ' + opts.host + ':' + resolvedPort + '\n')
+            api.emit('start', { host: opts.host, port: resolvedPort })
+          }, 500)
         })
         .catch(reject)
     })
@@ -172,6 +189,7 @@ function server (opts) {
     closed = true
     if (!handler || !started) return
     started = false
+    clearTimeout(startEventTimer)
     handler.kill()
     handler.removeAllListeners()
     log('Server closed.\n')

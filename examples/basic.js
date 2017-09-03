@@ -1,6 +1,8 @@
 const php = require('..')
 const server = php({
-  root: __dirname
+  root: __dirname,
+  host: 'localhost',
+  verbose: true
 })
 
 server.on('start', data => {
