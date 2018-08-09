@@ -4,14 +4,8 @@ const spawn = require('child_process').spawn
 const getPort = require('./get-port')
 const callStable = require('./call-stable')
 const Emitter = require('events')
-const shColors = require('kool-shell/utils/colors')
-const sh = require('kool-shell')()
-  .use(require('kool-shell/plugins/log'), {
-    infoPrefix: '[PHP] ',
-    errorPrefix: '[PHP] ' + shColors.red('Error: ')
-  })
-  .use(require('kool-shell/plugins/exec'))
-  .use(require('kool-shell/plugins/input'))
+const sh = require('kool-shell/namespaced')('node-php-server')
+sh.setLogOptions({ globalPrefix: '[PHP] ' })
 
 const CACHEPATH = path.join(__dirname, '..', '.bincache')
 

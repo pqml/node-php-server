@@ -1,6 +1,6 @@
 {
   "name": "@pqml/node-php-server",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Node.js built-in PHP server",
   "main": "index.js",
   "private": false,
@@ -8,7 +8,7 @@
   "author": "pqml <hugo.piquemal@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "fs-extra": "^4.0.1",
-    "kool-shell": "^1.5.0"
+    "fs-extra": "^7.0.0",
+    "kool-shell": "^2.1.0"
   }
 }
